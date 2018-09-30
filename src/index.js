@@ -1,54 +1,32 @@
 // PLEASE DON'T change function name
 module.exports = function makeExchange(currency) {
-module.exports = function solveEquation(equation) {
-  const solutions = [];
-  let x, x1, x2;
+    const coins = [ 50, 25, 10, 5, 1 ];
+    const labels = [ 'H', 'Q', 'D', 'N', 'P' ];
+    const result = {};
 
-  equation = equation.replace(/\s/g, '');
-  
-    let splitIndices = [];
-  for (let i = equation.length - 1; i >= 0; --i) {
-    if (equation[i] === '+' || equation[i] === '-') {
-      splitIndices.unshift(i);
+    if (currency > 10000) {
+        return { 
+            error: "You are rich, my friend! We don't have so much coins for exchange"
+        };
     }
-    if (splitIndices.length === 2) {
-      break;
+
+    let currentCoinIndex = 0;
+    while (currency > 0) {
+        let remainder = currency - coins[currentCoinIndex];
+        if (remainder >= 0) {
+            currency = remainder;
+            
+            // remember coin
+            if (result[labels[currentCoinIndex]]) {
+                ++result[labels[currentCoinIndex]];
+            } else {
+                result[labels[currentCoinIndex]] = 1;
+            }
+        } else {
+            ++currentCoinIndex;
+        }
     }
-  }
-   
-   let substrings = [];
-   
-  substrings.push(equation.slice(0, splitIndices[0]));
-  substrings.push(equation.slice(splitIndices[0], splitIndices[1]));
-  substrings.push(equation.slice(splitIndices[1]));
-  
-  
-  
-  let A = parseInt(substrings[0]),
-   B = parseInt(substrings[1]),
-      C = parseInt(substrings[2]);
 
+    return result;
+}
 
-  
-  let D = (B*B) - 4*A*C; 
-  
-  if (D > 0) {
-   x1 = (-B + Math.sqrt(D))/(2 * A);
-   solutions.push(Math.round(x1));
-   
-   x2 = (-B - Math.sqrt(D) )/(2 * A);
-   solutions.push(Math.round(x2));
-  }
-  
-  else if (D == 0) {
-   x = -B/(2 * A);
-   solutions.push(Math.round(x));
-  }
-  
-   else if (D < 0) {
-   return solutions = [];
-  }
-  
-  return solutions.sort ((a, b) => a - b);
-}
-}
